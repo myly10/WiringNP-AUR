@@ -1,0 +1,38 @@
+diff --git a/gpio/Makefile b/gpio/Makefile
+index 37b4887..7457fb2 100644
+--- a/gpio/Makefile
++++ b/gpio/Makefile
+@@ -23,13 +23,13 @@
+ #    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
+ #################################################################################
+ 
+-DESTDIR=/usr
+-PREFIX=/local
++DESTDIR ?= /usr
++PREFIX ?= /local
+ 
+ #DEBUG	= -g -O0
+ DEBUG	= -O2
+ CC	= gcc
+-INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
++INCLUDE	= -I$(DESTDIR)$(PREFIX)/include/wiringPi
+ CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
+ 
+ LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
+@@ -46,6 +46,8 @@ all:		gpio
+ 
+ gpio:	$(OBJ)
+ 	@echo [Link]
++	@echo "$(CC) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)"
++	@pwd
+ 	@$(CC) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)
+ 	
+ .c.o:
+@@ -66,7 +68,6 @@ tags:	$(SRC)
+ install:
+ 	@echo "[Install]"
+ 	@cp gpio		$(DESTDIR)$(PREFIX)/bin
+-	@chown root.root	$(DESTDIR)$(PREFIX)/bin/gpio
+ 	@chmod 4755		$(DESTDIR)$(PREFIX)/bin/gpio
+ 	@mkdir -p		$(DESTDIR)$(PREFIX)/man/man1
+ 	@cp gpio.1		$(DESTDIR)$(PREFIX)/man/man1

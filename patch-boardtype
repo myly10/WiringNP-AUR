@@ -1,0 +1,38 @@
+diff --git a/wiringPi/boardtype_friendlyelec.c b/wiringPi/boardtype_friendlyelec.c
+index 1091058..f88498e 100644
+--- a/wiringPi/boardtype_friendlyelec.c
++++ b/wiringPi/boardtype_friendlyelec.c
+@@ -196,6 +196,19 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
+     char allwinnerBoardID[255];
+     int ret;
+     int i;
++    const char* a64 = "sun50iw1p1";
++    const char* amlogic = "Amlogic";
++    const char* h3 = "sun8i";
++    const char* h5 = "sun50iw2";
++    const char* h3_kernel4 = "Allwinnersun8iFamily";
++    const char* h5_kernel4 = "Allwinnersun50iw2Family";
++    for (i=0; i<(sizeof(gAllBoardHardwareInfo)/sizeof(BoardHardwareInfo)); i++) {
++        if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, h5_kernel4, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0 && gAllBoardHardwareInfo[i].boardTypeId == NanoPi_NEO2) {
++            *retBoardInfo = &gAllBoardHardwareInfo[i];
++            return NanoPi_NEO2;
++        }
++    }
++
+     memset(hardware, 0, sizeof(hardware));
+     memset(revision, 0, sizeof(revision));
+     if ((ret = getFieldValueInCpuInfo(hardware, sizeof(hardware), revision, sizeof(revision))) > 0) {
+@@ -205,13 +218,6 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
+         return -1;
+     }
+ 
+-    const char* a64 = "sun50iw1p1";
+-    const char* amlogic = "Amlogic";
+-    const char* h3 = "sun8i";
+-    const char* h5 = "sun50iw2";
+-    const char* h3_kernel4 = "Allwinnersun8iFamily";
+-        const char* h5_kernel4 = "Allwinnersun50iw2Family";
+-
+     //a64 and amlogic, only check hardware
+     if (strncasecmp(hardware, a64, strlen(a64)) == 0 || strncasecmp(hardware, amlogic, strlen(amlogic)) == 0) {
+         for (i=0; i<(sizeof(gAllBoardHardwareInfo)/sizeof(BoardHardwareInfo)); i++) {
